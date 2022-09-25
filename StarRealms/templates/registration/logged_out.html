@@ -1,0 +1,8 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="d-flex flex-column flex-grow-1 p-3 bg-light scrollarea">
+  <p>Logged out!</p>
+  <a href="{% url 'login'%}">Click here to login again.</a>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base_generic.html' %}
+{% load gravatar %}
+
+{% block content %}
+
+<div class="d-flex flex-column flex-grow-1 p-3 bg-light scrollarea">
+<p>{{ message }}</p>
+{% if 'create_from_scratch' in actions %}
+    <form method="post" action="{% url 'hangtough:admin' %}">
+        {% csrf_token %}
+        How many players in heat: <input type="number" name="new_track" value="8">
+        <input type="hidden" name="track_id" value="{{ track.id }}">
+        <button type="submit" name="submit" class="btn btn-primary">Create first heat in track</button>
+    </form>
+{% elif not heat %}
+    <p>Please select which track you want to admin:</p>
+    {% for track in tracks %}
+        <form method="post" action="{% url 'hangtough:admin' %}">
+            {% csrf_token %}
+            <input type="hidden" name="track_id" value="{{ track.id }}">
+            <button type="submit" name="submit_param" class="btn btn-primary">{{ track.name }}</button>
+        </form>
+    {% endfor %}
+{% else %}
+    <table class="table table-striped table-bordered w-50">
+        <thead>
+            <tr>
+                <th class="w-auto">Player</th>
+                <th class="w-25">Wins</th>
+                <th class="w-25">Losses</th>
+                <th class="w-25">Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in heat.results_set.all %}
+                <tr>
+                    <td class="w-auto">{{ result.player.email|gravatar:24 }} {{ result.player }}</td>
+                    <td class="w-25">{{ result.wins }}</td>
+                    <td class="w-25">{{ result.losses }}</td>
+                    <td class="w-25">
+                        <form method="post" action="{% url 'hangtough:admin' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="track_id" value="{{ track.id }}">
+                            <input type="hidden" name="finish_heat" value="{{ result.wins }}">
+                            <button type="submit" name="submit" class="btn">&#x2B07;</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+
+</div>
+{% endblock content %}
