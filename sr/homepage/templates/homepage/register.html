@@ -3,6 +3,11 @@
 
 {% block content %}
 <div class="d-flex flex-column flex-grow-1 p-3 bg-light scrollarea">
+    {% if messages %}
+        {% for message in messages %}
+            <div{% if message.tags %} class="alert alert-danger {{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
    <h1>Register</h1>
     <form method="post">
         {% csrf_token %}

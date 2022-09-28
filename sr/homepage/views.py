@@ -31,7 +31,7 @@ class RegisterView(TemplateView):
         messages.error(request, "Unsuccesful registration. Invalid information.")
 
         context = self.get_context_data(**kwargs)
-        self.render_to_response(context)
+        return self.render_to_response(context)
 
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'homepage/profile.html'
